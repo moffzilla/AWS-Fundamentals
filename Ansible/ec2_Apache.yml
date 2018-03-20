@@ -1,6 +1,6 @@
 ---
 #"Description" : "Ansible Playbook to deploy Containerized Apache node using a single EC2 | EBS & Docker
-#**WARNING** This Playbook creates an Amazon EC2 instance & EBS Storage. You will be billed for the AWS resources used when deployed.",
+#**WARNING** This Playbook creates an Amazon EC2 instance & EBS Storage. You will be billed for the AWS resources used when deployed."
 
 - name: Create a Docker Compose Host for testing
   hosts: localhost
@@ -30,7 +30,7 @@
 #         assign_public_ip: yes
          volumes:
            - device_name: /dev/sdb
-             volume_size: 1          
+             volume_size: 1                     
       register: ec2
     
 #    - name: associate an elastic IP to instance
@@ -62,6 +62,26 @@
   tasks:
     - name: Install Python
       raw: sudo apt update && sudo apt install -y python-minimal
+    
+    - name: partition new disk
+      shell: /bin/echo -e "n\np\n1\n\n\nw" | sudo fdisk /dev/xvdb
+
+    - filesystem:
+        fstype: ext4
+        dev: /dev/xvdb1
+        opts: -cc
+
+    - name: Mount up device by label
+      mount:
+        path: /mnt/files
+        src: /dev/xvdb1
+        fstype: ext4
+        state: present
+        boot: true
+
+
+#    - name: mount /tools
+#        mount: name=/tools src=/dev/xvdb1 state=mounted fstype=ext4  
 
 - hosts: launched
   sudo: yes
@@ -88,20 +108,3 @@
     - name: Deploy WebServer 
       command: docker run --name="aws-fundamental" -d -p 80:80 -v $PWD/html:/var/www/html/ linuxconfig/apache
 
-
-
-
-# README
-# Resize the volume 60Gb then:
-#https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html
-# sudo docker run -d --restart=unless-stopped -p 8080:8080 rancher/server:stable
-# http://rancher.com/docs/rancher/v1.6/en/quick-start-guide/
-#https://wiki.onap.org/display/DW/ONAP+on+Kubernetes#ONAPonKubernetes-UndercloudInstallation
-#
-#https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169
-#sudo mkdir /mnt/onap
-#sudo chmod 777 /mnt/onap
-#sudo service docker stop
-#sudo mv /var/lib/docker /mnt/docker
-#sudo ln -s /mnt/docker /var/lib/docker
-#sudo service docker start

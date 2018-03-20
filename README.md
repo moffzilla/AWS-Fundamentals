@@ -10,3 +10,11 @@ This project proposes two tracks
 2.- Ansible + Containerized Apache
 
 	Under "~/Ansible"
+
+
+The following tools are also included for resetting your enviroment
+
+	- terminate_instance.py
+	- terminate_all_instances.py
+	- list_instances.py
+
