@@ -1,0 +1,107 @@
+---
+#"Description" : "Ansible Playbook to deploy Containerized Apache node using a single EC2 | EBS & Docker
+#**WARNING** This Playbook creates an Amazon EC2 instance & EBS Storage. You will be billed for the AWS resources used when deployed.",
+
+- name: Create a Docker Compose Host for testing
+  hosts: localhost
+  gather_facts: False
+  vars:
+# Please make sure the resources below exists in the region selected 
+    key_name: generic-cloud-wk
+    instance_type: t2.micro
+    security_group: fundamentals
+#    image: ami-1d4e7a66
+#    region: us-east-1
+    image: ami-8803e0f0
+    region: us-west-2
+    count: 1
+
+  tasks:
+    - name: Launch instance
+      ec2:
+         key_name: "{{ key_name }}"
+         group: "{{ security_group }}"
+         instance_type: "{{ instance_type }}"
+         image: "{{ image }}"
+         wait: true
+         region: "{{ region }}"
+         count: "{{ count }}"
+#         vpc_subnet_id: subnet-29e63245
+#         assign_public_ip: yes
+         volumes:
+           - device_name: /dev/sdb
+             volume_size: 1          
+      register: ec2
+    
+#    - name: associate an elastic IP to instance
+#      ec2_eip:
+#        instance_id: "{{ item }}"
+#        region: "{{ region }}"
+#        ip: 52.36.139.109
+#      register: instance_eip
+
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: launched
+      with_items: "{{ ec2.instances }}"
+
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ item.public_dns_name }}"
+        port: 22
+        delay: 60
+        timeout: 320
+        state: started
+      with_items: "{{ ec2.instances }}"
+
+- hosts: launched
+  become: true
+  remote_user: ubuntu
+  gather_facts: false
+  tasks:
+    - name: Install Python
+      raw: sudo apt update && sudo apt install -y python-minimal
+
+- hosts: launched
+  sudo: yes
+  roles:
+    - ADC
+  vars:
+    docker_compose_version: 1.16.1
+
+- hosts: launched
+  become: true
+  remote_user: ubuntu
+  gather_facts: false
+  tasks:
+    - user: name=ubuntu groups=docker append=yes
+
+    - name: Creates Apache Root directory
+      file: path=/home/ubuntu/html state=directory
+
+    - name: Write Welcome Page
+      shell: |
+        echo 'Hello AWS World by Docker Apache Container' > html/index.html
+      register: WelcomeApache
+
+    - name: Deploy WebServer 
+      command: docker run --name="aws-fundamental" -d -p 80:80 -v $PWD/html:/var/www/html/ linuxconfig/apache
+
+
+
+
+# README
+# Resize the volume 60Gb then:
+#https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html
+# sudo docker run -d --restart=unless-stopped -p 8080:8080 rancher/server:stable
+# http://rancher.com/docs/rancher/v1.6/en/quick-start-guide/
+#https://wiki.onap.org/display/DW/ONAP+on+Kubernetes#ONAPonKubernetes-UndercloudInstallation
+#
+#https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169
+#sudo mkdir /mnt/onap
+#sudo chmod 777 /mnt/onap
+#sudo service docker stop
+#sudo mv /var/lib/docker /mnt/docker
+#sudo ln -s /mnt/docker /var/lib/docker
+#sudo service docker start
