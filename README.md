@@ -7,11 +7,13 @@ This project proposes two tracks
  
 	Under "~/CloudFormation"
 
-2.- Ansible + Containerized Apache
+2.- Ansible + Docker Apache
 
 	Under "~/Ansible"
 
-This is a simple playbook for Provisioning an AWS instance and Installing Docker-CE and Apache, inlcuding recommended packages. Adding a secondary HDD for hosting Apache default Document Roots with a customized default Welcome Page
+This is a simple playbook for Provisioning an AWS instance and Installing Docker-CE and Apache, 
+Adding a secondary HDD for hosting Apache default Document Roots with a customized default Welcome Page.
+Deploying Apache as a Docker Container.
 
 Execute:
 	ansible-playbook Ansible/ec2_Apache.yml -vvvv --user=ubuntu
