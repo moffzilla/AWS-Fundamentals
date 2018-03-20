@@ -11,6 +11,10 @@ This project proposes two tracks
 
 	Under "~/Ansible"
 
+Prerequisites:
+
+	- Make sure resources as the AMI image, SSH Keys, Security Groups referenced in the artifacts exists in the selected region
+	This project defaults region US-West-2 (Oregon)
 
 The following tools are also included for resetting your enviroment
 
