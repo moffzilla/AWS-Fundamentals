@@ -31,14 +31,7 @@
          volumes:
            - device_name: /dev/sdb
              volume_size: 1                     
-      register: ec2
-    
-#    - name: associate an elastic IP to instance
-#      ec2_eip:
-#        instance_id: "{{ item }}"
-#        region: "{{ region }}"
-#        ip: 52.36.139.109
-#      register: instance_eip
+      register: ec2   
 
     - name: Add new instance to host group
       add_host:
@@ -54,6 +47,15 @@
         timeout: 320
         state: started
       with_items: "{{ ec2.instances }}"
+
+#    - name: associate an elastic IP to instance
+#      ec2_eip:
+#        instance_id: "{{ item.id }}"
+#        region: "{{ region }}"
+#        ip: 34.210.20.241
+#        state: present
+#      with_items: "{{ ec2.instances }}"
+#      register: instance_eip    
 
 - hosts: launched
   become: true
@@ -100,20 +102,47 @@
     - user: name=ubuntu groups=docker append=yes
 
     - name: Creates Apache Root directory
-#      file: path=/home/ubuntu/html state=directory
       file: 
         path: /mnt/html/www 
         state: directory
         mode: "u=rwx,g=wx,o=rwx"
 
-    - name: Write Welcome Page
-      shell: |
-        echo 'Hello AWS World by Docker Apache Container' > /mnt/html/www/index.html
-      register: WelcomeApache
+#    - name: Write Welcome Page
+#      shell: |
+#        echo 'Hello AWS World by Docker Apache Container' > /mnt/html/www/index.html
+#      register: WelcomeApache
 
-    - name: Deploy WebServer 
+ #   - name: Deploy WebServer 
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v $PWD/html:/var/www/html/ linuxconfig/apache
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v /mnt/html/www:/var/www/html/ linuxconfig/apache
  #     command: docker run -dit --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ httpd:2.4
-      command: docker run -dit --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4
+ #     command: docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4
 
+    - name: Install Apache
+      raw: sudo apt install -y apache2
+
+    - name: Install Apache
+      raw: sudo apt install -y git
+
+    - name: enabled mod_rewrite
+      apache2_module: name=rewrite state=present
+      notify:
+        - restart apache2
+
+    - name: apache2 listen on port 80
+      lineinfile: dest=/etc/apache2/ports.conf regexp="^Listen " line="Listen 80 " state=present
+    
+    - name: apache2 listen on port 80
+      lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="^DocumentRoot " line="DocumentRoot /mnt/html/www " state=present
+
+    - name: apache2 listen on port 80
+      lineinfile: dest=/etc/apache2/apache2.conf regexp="^<Directory /var/www/> " line="<DocumentRoot /mnt/html/www/> " state=present
+      notify:
+        - restart apache2
+
+    - name: clone basic html template
+      git: repo=https://github.com/do-community/ansible-apache-tutorial.git dest=/mnt/html/www update=no
+  
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted   
