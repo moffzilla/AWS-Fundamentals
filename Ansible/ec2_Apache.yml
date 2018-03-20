@@ -71,7 +71,7 @@
     - filesystem:
         fstype: ext4
         dev: /dev/xvdb1
-        opts: -cc
+#        opts: -cc
 
     - name: Creates Apache Mount directory
       file: 
@@ -84,7 +84,7 @@
 
     - name: Make Mount Point Permanent
       shell: |
-        echo '/dev/xvdb1    /mnt/html    ext4    defaults    0    1' > /etc/fstab
+        echo '/dev/xvdb1    /mnt/html    ext4    defaults    0    1' >> /etc/fstab
       register: WelcomeApache
  
 - hosts: launched
@@ -107,42 +107,55 @@
         state: directory
         mode: "u=rwx,g=wx,o=rwx"
 
-#    - name: Write Welcome Page
-#      shell: |
-#        echo 'Hello AWS World by Docker Apache Container' > /mnt/html/www/index.html
-#      register: WelcomeApache
+    - name: Write Welcome Page
+      shell: |
+        echo 'Hello AWS World' > /mnt/html/www/index.html
+      register: WelcomeApache
 
- #   - name: Deploy WebServer 
+    - name: Deploy WebServer 
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v $PWD/html:/var/www/html/ linuxconfig/apache
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v /mnt/html/www:/var/www/html/ linuxconfig/apache
  #     command: docker run -dit --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ httpd:2.4
- #     command: docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4
+      command: docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4
 
-    - name: Install Apache
-      raw: sudo apt install -y apache2
+#########################################
+# Optional - Install Apache without Docker
+#########################################
+#    - name: Install Apache
+#      raw: sudo apt install -y apache2
 
-    - name: Install Apache
-      raw: sudo apt install -y git
+#    - name: Install Apache
+#      raw: sudo apt install -y git
 
-    - name: enabled mod_rewrite
-      apache2_module: name=rewrite state=present
-      notify:
-        - restart apache2
+#    - name: Transfer Apache Port Config  
+#      copy:
+#        src: ports.conf
+#        dest: /etc/apache2/
+#        owner: root
+#        group: root
+#        mode: 0777
 
-    - name: apache2 listen on port 80
-      lineinfile: dest=/etc/apache2/ports.conf regexp="^Listen " line="Listen 80 " state=present
-    
-    - name: apache2 listen on port 80
-      lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="^DocumentRoot " line="DocumentRoot /mnt/html/www " state=present
+#    - name: Transfer Apache New Default Doc Root  
+#      copy:
+#        src: 000-default.conf
+#        dest: /etc/apache2/sites-available/
+#        owner: root
+#        group: root
+#        mode: 0777
 
-    - name: apache2 listen on port 80
-      lineinfile: dest=/etc/apache2/apache2.conf regexp="^<Directory /var/www/> " line="<DocumentRoot /mnt/html/www/> " state=present
-      notify:
-        - restart apache2
+#    - name: Transfer Apache Default Root  
+#      copy:
+#        src: apache2.conf
+#        dest: /etc/apache2/
+#        owner: root
+#        group: root
+#        mode: 0777
 
-    - name: clone basic html template
-      git: repo=https://github.com/do-community/ansible-apache-tutorial.git dest=/mnt/html/www update=no
+#    - name: enabled mod_rewrite
+#      apache2_module: name=rewrite state=present
+#      notify:
+#        - restart apache2
   
-  handlers:
-    - name: restart apache2
-      service: name=apache2 state=restarted   
+#  handlers:
+#    - name: restart apache2
+#      service: name=apache2 state=restarted   

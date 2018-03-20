@@ -14,7 +14,7 @@ This project proposes two tracks
 	This project defaults region US-West-2 (Oregon)
 
 	This is a simple playbook for Provisioning an AWS instance and Installing Docker-CE and Apache, inlcuding recommended packages.
-        Adding a secondary HDD hosting Apache default Document Roots with a customized default Welcome Page
+        Adding a secondary HDD for hosting Apache default Document Roots with a customized default Welcome Page
 
 Requirements / Tested :
 
@@ -28,7 +28,8 @@ You’ll need AWS CLI & this Python module installed on your control machine. Bo
 
 'pip install awscli boto3 -U --ignore-installed six'”.
 
-AWS AIM Credentials with enough rigths for launching VMS and of course, if you reference a resource in AWS, such as a Security Group, make sure that the SG exists and it is properly configured, etc.
+AWS AIM Credentials with enough rigths for launching VMs and of course, if you reference a resource in AWS, such as a Security Group, make sure that the SG exists and it is properly configured, etc.
+This project defaults region US-West-2 (Oregon) and uses Ubuntu 16.04 guess OS.
 
 Make sure you do:
 
@@ -50,6 +51,10 @@ Execute (Generic)
 'export AWS_ACCESS_KEY_ID=[your key]'
 
 'export AWS_SECRET_ACCESS_KEY=[your secret]'
+
+Also set region = us-west-2
+
+
 
 'ansible-playbook Ansible/ec2_Apache.yml -vvvv --user=ubuntu'
 
