@@ -8,6 +8,7 @@
   become: true
   remote_user: ubuntu
   gather_facts: false
+  sudo: yes
   tasks:    
     - name: partition new disk
       shell: /bin/echo -e "n\np\n1\n\n\nw" | sudo fdisk /dev/xvdh
@@ -42,10 +43,24 @@
         echo 'Hello AWS World' > /mnt/html/www/index.html
       register: WelcomeApache
 
+    - git:
+        repo: 'https://github.com/moffzilla/AWS-Fundamentals.git'
+        dest: /mnt/html/AWS-Fundamentals
+        clone: yes
+  roles:
+    - ADC
+  vars:
+    docker_compose_version: 1.16.1
 
+    - name: Deploy WebServer 
+ #     command: docker run --name="aws-fundamental" -d -p 80:80 -v $PWD/html:/var/www/html/ linuxconfig/apache
+ #     command: docker run --name="aws-fundamental" -d -p 80:80 -v /mnt/html/www:/var/www/html/ linuxconfig/apache
+ #     command: docker run -dit --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ httpd:2.4
+      command: docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4 
+   
 #    - name: Transfer Apache Port Config  
 #      copy:
-#        src: ports.conf
+#        src: httpd/ports.conf
 #        dest: /etc/apache2/
 #        owner: root
 #        group: root
@@ -53,7 +68,7 @@
 
 #    - name: Transfer Apache New Default Doc Root  
 #      copy:
-#        src: 000-default.conf
+#        src: httpd/000-default.conf
 #        dest: /etc/apache2/sites-available/
 #        owner: root
 #        group: root
@@ -61,7 +76,7 @@
 
 #    - name: Transfer Apache Default Root  
 #      copy:
-#        src: apache2.conf
+#        src: httpd/apache2.conf
 #        dest: /etc/apache2/
 #        owner: root
 #        group: root

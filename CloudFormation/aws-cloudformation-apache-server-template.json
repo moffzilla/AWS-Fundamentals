@@ -50,7 +50,8 @@
             "sudo apt-get update -y\n",
             "sudo apt-get install -y apache2 ansible git\n",
             "echo \"localhost ansible_connection=local\" > /etc/ansible/hosts\n",
-            "ansible-pull -U ", {"Ref": "AnsibleRepository"},
+            "# sudo ansible-galaxy install git+https://git@github.com:moffzilla/ADC.git\n",
+            "# sudo ansible-pull -U ", {"Ref": "AnsibleRepository"},
             " ", {"Ref": "AnsiblePlaybook"}
               ]
             ]

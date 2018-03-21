@@ -129,7 +129,7 @@
 
 #    - name: Transfer Apache Port Config  
 #      copy:
-#        src: ports.conf
+#        src: httpd/ports.conf
 #        dest: /etc/apache2/
 #        owner: root
 #        group: root
@@ -137,7 +137,7 @@
 
 #    - name: Transfer Apache New Default Doc Root  
 #      copy:
-#        src: 000-default.conf
+#        src: httpd/000-default.conf
 #        dest: /etc/apache2/sites-available/
 #        owner: root
 #        group: root
@@ -145,7 +145,7 @@
 
 #    - name: Transfer Apache Default Root  
 #      copy:
-#        src: apache2.conf
+#        src: httpd/apache2.conf
 #        dest: /etc/apache2/
 #        owner: root
 #        group: root
