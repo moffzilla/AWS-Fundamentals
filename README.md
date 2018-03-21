@@ -12,9 +12,13 @@ Execute:
 	aws cloudformation create-stack --stack-name mapache-stack --template-url https://s3-us-west-2.amazonaws.com/awsfundamentalsrepo/aws-cloudformation-apache-server-template.json
 
 You can replace the following default settings:
-	KeyName": "generic-cloud-wk",
-	AnsibleRepository": https://github.com/moffzilla/AWS-Fundamentals",
+
+	KeyName": "generic-cloud-wk"
+	
+	AnsibleRepository": https://github.com/moffzilla/AWS-Fundamentals"
+	
 	AnsiblePlaybook: "CloudFormation/CF_Apache.yml"
+	
 
 You can also create the stack at the CloudFormation Console
 
@@ -33,6 +37,7 @@ Adding a secondary HDD for hosting Apache default Document Roots with a customiz
 Deploying Apache as a Docker Container.
 
 Execute:
+
 	ansible-playbook Ansible/ec2_Apache.yml -vvvv --user=ubuntu
 	
 Remove: 
