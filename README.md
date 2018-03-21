@@ -7,6 +7,17 @@ This project proposes two tracks
  
 	Under "~/CloudFormation"
 
+Execute:
+	aws cloudformation create-stack --stack-name apache-test --template-url https://s3-us-west-2.amazonaws.com/awsfundamentalsrepo/aws-cloudformation-apache-server-template.json
+
+You can replace the following default settings:
+	KeyName": "generic-cloud-wk",
+	AnsibleRepository": https://github.com/moffzilla/AWS-Fundamentals",
+	AnsiblePlaybook: "CloudFormation/CF_Apache.yml"
+
+You can also use the CloudFormation Console
+
+
 2.- Ansible + Docker Apache
 
 	Under "~/Ansible"
@@ -20,7 +31,8 @@ Execute:
 
 General Requirements:
 
-- Make sure resources as the AMI image, SSH Keys, Security Groups referenced in the artifacts exists in the selected region
+- Make sure resources as the AMI image, SSH Keys, Security Groups referenced in the artifacts exists in the selected region.
+- You have permissions for accessing S3 resources, createstacks and to access any other required AWS resource.
 - This project defaults region US-West-2 (Oregon) & uses Ubuntu 16.04 guess OS.
 - You’ll need AWS CLI & this Python module installed on your control machine. Boto can be installed from your OS distribution or python’s using the pip command, install the AWS CLI and Boto3:
 
