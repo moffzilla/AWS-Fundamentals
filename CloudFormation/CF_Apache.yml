@@ -97,7 +97,7 @@
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v $PWD/html:/var/www/html/ linuxconfig/apache
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v /mnt/html/www:/var/www/html/ linuxconfig/apache
  #     command: docker run -dit --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ httpd:2.4
-      command: docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4 
+      command: sudo docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4 
    
 #    - name: Transfer Apache Port Config  
 #      copy:

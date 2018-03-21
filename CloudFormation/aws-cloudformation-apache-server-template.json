@@ -48,9 +48,10 @@
           "Fn::Base64": { "Fn::Join": [ "", [
             "#!/bin/bash\n",
             "sudo apt-get update -y\n",
-            "sudo apt-get install -y apache2 ansible git\n",
+            "sudo apt-get install -y ansible git\n",
             "echo \"localhost ansible_connection=local\" > /etc/ansible/hosts\n",
-            "sudo ansible-pull -U ", {"Ref": "AnsibleRepository"}," ",{"Ref": "AnsiblePlaybook"}
+            "sudo ansible-pull -U https://github.com/moffzilla/AWS-Fundamentals CloudFormation/CF_Apache.yml",
+            "# sudo ansible-pull -U ", {"Ref": "AnsibleRepository"}," ",{"Ref": "AnsiblePlaybook"}
               ]
             ]
           }
