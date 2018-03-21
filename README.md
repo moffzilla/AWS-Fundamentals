@@ -8,14 +8,20 @@ This project proposes two tracks
 	Under "~/CloudFormation"
 
 Execute:
-	aws cloudformation create-stack --stack-name apache-test --template-url https://s3-us-west-2.amazonaws.com/awsfundamentalsrepo/aws-cloudformation-apache-server-template.json
+
+	aws cloudformation create-stack --stack-name mapache-stack --template-url https://s3-us-west-2.amazonaws.com/awsfundamentalsrepo/aws-cloudformation-apache-server-template.json
 
 You can replace the following default settings:
 	KeyName": "generic-cloud-wk",
 	AnsibleRepository": https://github.com/moffzilla/AWS-Fundamentals",
 	AnsiblePlaybook: "CloudFormation/CF_Apache.yml"
 
-You can also use the CloudFormation Console
+You can also create the stack at the CloudFormation Console
+
+Remove:
+
+	aws cloudformation delete-stack --stack-name mapache-stack
+	
 
 
 2.- Ansible + Docker Apache
@@ -28,6 +34,11 @@ Deploying Apache as a Docker Container.
 
 Execute:
 	ansible-playbook Ansible/ec2_Apache.yml -vvvv --user=ubuntu
+	
+Remove: 
+	
+	'./terminate_all_instances.py' 
+
 
 General Requirements:
 
