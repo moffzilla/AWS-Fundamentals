@@ -8,7 +8,7 @@
   become: true
   remote_user: ubuntu
   gather_facts: false
-  sudo: yes
+#  sudo: yes
   tasks:    
     - name: partition new disk
       shell: /bin/echo -e "n\np\n1\n\n\nw" | sudo fdisk /dev/xvdh
@@ -84,29 +84,11 @@
         name: 'docker-ce'
         state: 'latest'
 
-    - name: 'Add any additional service startup options to the DOCKER_OPTS config variable'
-      lineinfile:
-        dest: '/etc/default/docker'
-        state: 'present'
-        line: 'DOCKER_OPTS="{{docker_additional_service_opts}}"'
-        regexp: '^DOCKER_OPTS='
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      notify: 'docker-restart-service'
-
     - name: 'Start the docker service'
       service:
         name: 'docker'
         state: 'started'
         enabled: 'yes'
-
-    - name: 'Ensure that the docker service is functional'
-      docker_ping:
-      register: result
-      retries: 5
-      delay: 10
-      until: result|success
 
     - name: 'Install python-pip'
       apt:
