@@ -10,11 +10,11 @@
   gather_facts: false
   tasks:    
     - name: partition new disk
-      shell: /bin/echo -e "n\np\n1\n\n\nw" | sudo fdisk /dev/xvdb
+      shell: /bin/echo -e "n\np\n1\n\n\nw" | sudo fdisk /dev/xvdh
 
     - filesystem:
         fstype: ext4
-        dev: /dev/xvdb1
+        dev: /dev/xvdh1
 #        opts: -cc
 
     - name: Creates Apache Mount directory
@@ -24,11 +24,11 @@
         mode: "u=rwx,g=wx,o=rwx"
 
     - name: Mount New File System
-      shell: sudo mount /dev/xvdb1 /mnt/html 
+      shell: sudo mount /dev/xvdh1 /mnt/html 
 
     - name: Make Mount Point Permanent
       shell: |
-        echo '/dev/xvdb1    /mnt/html    ext4    defaults    0    1' >> /etc/fstab
+        echo '/dev/xvdh1    /mnt/html    ext4    defaults    0    1' >> /etc/fstab
       register: WelcomeApache
 
     - name: Creates Apache Root directory

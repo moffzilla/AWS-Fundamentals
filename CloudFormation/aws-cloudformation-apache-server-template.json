@@ -22,7 +22,7 @@
     },
     "AnsiblerCheckout": {
       "Type": "String",
-      "Default": "386fdb253284e8fedc4943706f5f4374f7dc89d6",
+      "Default": "master",
       "Description": "The branch/tag/commit to checkout"
     },
     "AnsiblePlaybook": {
@@ -43,10 +43,7 @@
         "ImageId":  {"Fn::FindInMap":["RegionMap", {"Ref" : "AWS::Region" }, "AMI" ]},
         "InstanceType": { "Ref": "InstanceType" },
         "KeyName": { "Ref": "KeyName" },
-        "SecurityGroups": [ { "Ref": "fundamentals" } ],
-        "Volumes" : [
-          { "VolumeId" : { "Ref" : "SecVolume" }, "Device" : "/dev/sdb" }
-       ],
+        "SecurityGroups": [ { "Ref": "WebSecurityGroup" } ],
         "UserData": {
           "Fn::Base64": { "Fn::Join": [ "", [
             "#!/bin/bash\n",
@@ -54,7 +51,6 @@
             "sudo apt-get install -y apache2 ansible git\n",
             "echo \"localhost ansible_connection=local\" > /etc/ansible/hosts\n",
             "ansible-pull -U ", {"Ref": "AnsibleRepository"},
-            " -C ", {"Ref": "AnsibleCheckout"},
             " ", {"Ref": "AnsiblePlaybook"}
               ]
             ]
@@ -62,12 +58,23 @@
         }
       }
     },
-"SecVolume" : {
+"NewVolume" : {
       "Type" : "AWS::EC2::Volume",
       "Properties" : {
-         "Size" : "1"
+         "Size" : "1",
+         "AvailabilityZone" : { "Fn::GetAtt" : [ "Ec2Instance", "AvailabilityZone" ] }
       }
-   },    
+   },
+   "MountPoint" : {
+    "Type" : "AWS::EC2::VolumeAttachment",
+    "Properties" : {
+       "InstanceId" : { "Ref" : "Ec2Instance" },
+       "VolumeId"  : { "Ref" : "NewVolume" },
+       "Device" : "/dev/sdh"
+    }
+ },
+   
+    
 "WebSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -84,19 +91,20 @@
             "FromPort": "22",
             "ToPort": "22",
             "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3389",
+            "ToPort": "3389",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "udp",
+            "FromPort": "3389",
+            "ToPort": "3389",
+            "CidrIp": "0.0.0.0/0"
           }
         ]
-      }
-    },
-    "WaitHandle": {
-      "Type": "AWS::CloudFormation::WaitConditionHandle"
-    },
-    "WaitCondition": {
-      "Type": "AWS::CloudFormation::WaitCondition",
-      "DependsOn": "Ec2Instance",
-      "Properties": {
-        "Handle": { "Ref": "WaitHandle" },
-        "Timeout": "300"
       }
     }
   },
