@@ -90,17 +90,9 @@
         state: 'started'
         enabled: 'yes'
 
-    - name: 'Install python-pip'
-      apt:
-        name: 'python-pip'
-        state: 'present'
-
-    - name: 'Install virtualenv'
-      pip:
-        name: 'virtualenv'
-        state: 'present'
+    - name: Add Ubuntu user to Docker group
+      user: name=ubuntu groups=docker append=yes
         
-
     - name: Deploy WebServer 
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v $PWD/html:/var/www/html/ linuxconfig/apache
  #     command: docker run --name="aws-fundamental" -d -p 80:80 -v /mnt/html/www:/var/www/html/ linuxconfig/apache
