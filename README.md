@@ -49,6 +49,7 @@ General Requirements:
 
 - Make sure resources as the AMI image, SSH Keys, Security Groups referenced in the artifacts exists in the selected region.
 - You have permissions for accessing S3 resources, createstacks and to access any other required AWS resource.
+- You have created a bucket : "awsfundamentalsrepo" and uploaded the stack template : "aws-cloudformation-apache-server-template.json".
 - This project defaults region US-West-2 (Oregon) & uses Ubuntu 16.04 guess OS.
 - You’ll need AWS CLI & this Python module installed on your control machine. Boto can be installed from your OS distribution or python’s using the pip command, install the AWS CLI and Boto3:
 
