@@ -8,29 +8,29 @@ AWS CloudFormation Track:
 
 Makes use of AWS CloudFormation templates to create EC2 infrastructure and Ansible for staging new volumes, install Docker and deploy Apache as a container.
 	
-	EIP Associated with EC2 Instance:**54.191.197.245**
+	EIP Associated with EC2 Instance:54.191.197.245
 
-	Public DNS Associated with EC2 Instance:**http://ec2-54-191-197-245.us-west-2.compute.amazonaws.com/**
+	Public DNS Associated with EC2 Instance:http://ec2-54-191-197-245.us-west-2.compute.amazonaws.com/
 	
-	URL Associated with EC2 Instance:**http://awscf.moffzilla.io**
+	URL Associated with EC2 Instance:http://awscf.moffzilla.io
 
-	Link showing mounted EBS Volume: **http://awscf.moffzilla.io/screen-shot1.png**
+	Link showing mounted EBS Volume: http://awscf.moffzilla.io/screen-shot1.png
 
-	Link showing index.html resides within EBS:**http://awscf.moffzilla.io/screen-shot2.png** 
+	Link showing index.html resides within EBS:http://awscf.moffzilla.io/screen-shot2.png 
 
 
 Ansible Track: 
 Makes use of Ansible to create EC2 infrastructure and for staging new volumes, install Docker and deploy Apache as a container.
 
-	EIP Associated with EC2 Instance:**52.42.214.106**
+	EIP Associated with EC2 Instance:52.42.214.106
 
-	Public DNS Associated with EC2 Instance:**ec2-52-42-214-106.us-west-2.compute.amazonaws.com**
+	Public DNS Associated with EC2 Instance:ec2-52-42-214-106.us-west-2.compute.amazonaws.com
 	
-	URL Associated with EC2 Instance:**http://awsansible.moffzilla.io**
+	URL Associated with EC2 Instance:http://awsansible.moffzilla.io
 	
-	Link showing mounted EBS Volume: **http://awsansible.moffzilla.io/screen-shot1.png**
+	Link showing mounted EBS Volume: http://awsansible.moffzilla.io/screen-shot1.png
 
-	Link showing index.html resides within EBS:**http://awsansible.moffzilla.io/screen-shot2.png** 
+	Link showing index.html resides within EBS:http://awsansible.moffzilla.io/screen-shot2.png 
 
 
 Implementation details and artifacts information for each track below:
