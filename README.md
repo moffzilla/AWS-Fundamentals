@@ -1,7 +1,33 @@
-# AWS_Fundamentals
-Automate the deployment of a Web Server with AWS EC2 and ELB 
+# AWS Fundamentals
+This project creates a running EC2 instance meeting the AWS Fundamental Exercise #1 requirements
+It provides two alternative "tracks" for accompishing it. 
 
-This project proposes two tracks
+AWS CloudFormation Track: 
+
+Makes use of AWS CloudFormation templates to create EC2 infrastructure and Ansible for staging new volumes, install Docker and deploy Apache as a container.
+	
+	EIP Associated with EC2 Instance:**XXXXX**
+
+	URL Associated with EC2 Instance:**XXXXX**
+
+	Link showing mounted EBS Volume: **xxxxx**
+
+	Link showing index.html resides within EBS:**xxxx** 
+
+
+Ansible Track: 
+Makes use of Ansible to create EC2 infrastructure and for staging new volumes, install Docker and deploy Apache as a container.
+
+	EIP Associated with EC2 Instance:**XXXXX**
+
+	URL Associated with EC2 Instance:**XXXXX**
+	
+	Link showing mounted EBS Volume: **xxxxx**
+
+	Link showing index.html resides within EBS:**xxxx** 
+
+
+Implementation Details and artifacts for each track below:
 
 1.- AWS CloudFormation
  
@@ -28,13 +54,9 @@ Remove:
 	
 
 
-2.- Ansible + Docker Apache
+2.- Ansible
 
 	Under "~/Ansible"
-
-This is a simple playbook for Provisioning an AWS instance and Installing Docker-CE and Apache, 
-Adding a secondary HDD for hosting Apache default Document Roots with a customized default Welcome Page.
-Deploying Apache as a Docker Container.
 
 Execute:
 
@@ -42,21 +64,17 @@ Execute:
 	
 Remove: 
 	
-	'./terminate_all_instances.py' 
+	'aws ec2 describe-instances | grep InstanceId' 
+	'./terminate_instances.py [instance-id]' 
 
 
 General Requirements:
 
-- Make sure resources as the AMI image, SSH Keys, Security Groups referenced in the artifacts exists in the selected region.
-- You have permissions for accessing S3 resources, createstacks and to access any other required AWS resource.
+- Make sure resources as the AMI image, SSH Keys, Security Groups referenced in the artifacts exist in the selected region.
+- You have permissions for accessing S3 resources you may create to replace default ones, createstacks and to access any other required AWS resource.
 - You have created a bucket : "awsfundamentalsrepo" and uploaded the stack template : "aws-cloudformation-apache-server-template.json".
 - This project defaults region US-West-2 (Oregon) & uses Ubuntu 16.04 guess OS.
-- You’ll need AWS CLI & this Python module installed on your control machine. Boto can be installed from your OS distribution or python’s using the pip command, install the AWS CLI and Boto3:
-
-	'pip install awscli boto3 -U --ignore-installed six'”.
-
-- AWS AIM Credentials with enough rigths for launching VMs, if you reference a resource in AWS, such as a Security Group, make sure that the objetc exists and it is properly configured, etc.
-
+- You’ll need AWS CLI installed.
 - Before executing Ansible Playbook make sure you have access to AWS by exporting or configuring your 
     AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY
@@ -71,14 +89,16 @@ General Requirements:
 
 Ansible Specific Requirements :
 	
+- You will need installed this Python module & Boto can be installed from your OS distribution or python’s using the pip command, install the AWS CLI and Boto3:
+
+	'pip install awscli boto3 -U --ignore-installed six'”.
+
 - Make sure you can SSH locally with ubuntu (you may need to add your pub key content into the '~/.ssh/authorized_keys')
 - Disable host checking '/etc/ansible/ansible.cfg' 'host_key_checking = False'
 - Update the Inventory as follows:
 	'/etc/ansible/host' 'localhost ansible_connection=local'
 -Install the 'moffzilla.docker' AKA 'ADC' Role
 	ansible-galaxy install -r requirements.yml
-
-
 
 
  	
