@@ -1,6 +1,6 @@
 # AWS Fundamentals
 This project creates a running EC2 instance meeting the AWS Fundamental Exercise #1 requirements
-It provides two alternative "tracks" for accompishing it.
+It provides two alternative "tracks" for accomplishing it.
 
 Updates available at https://github.com/moffzilla/AWS-Fundamentals
 
@@ -78,7 +78,7 @@ General Requirements:
 
 - Make sure resources as the AMI image, SSH Keys, Security Groups referenced in the artifacts exist in the selected region.
 - You have permissions for accessing S3 resources you may create to replace default ones, createstacks and to access any other required AWS resource.
-- You have created a bucket : "awsfundamentalsrepo" and uploaded the stack template : "aws-cloudformation-apache-server-template.json".
+- You have created a S3 bucket : "awsfundamentalsrepo" and uploaded the stack template : "aws-cloudformation-apache-server-template.json".
 - This project defaults region US-West-2 (Oregon) & uses Ubuntu 16.04 guess OS.
 - You’ll need AWS CLI installed.
 - Before executing Ansible Playbook make sure you have access to AWS by exporting or configuring your 
