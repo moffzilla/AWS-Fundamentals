@@ -20,6 +20,7 @@ Makes use of AWS CloudFormation templates to create EC2 infrastructure and Ansib
 
 
 Ansible Track: 
+
 Makes use of Ansible to create EC2 infrastructure and for staging new volumes, install Docker and deploy Apache as a container.
 
 	EIP Associated with EC2 Instance: 52.42.214.106
