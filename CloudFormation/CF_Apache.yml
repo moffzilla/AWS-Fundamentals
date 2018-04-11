@@ -93,29 +93,32 @@
     - name: Add Ubuntu user to Docker group
       user: name=ubuntu groups=docker append=yes
         
-#    - name: Deploy WebServer 
-#      command: sudo docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4 
+#   - name: Deploy WebServer 
+#      command: docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4
 
     - name: Install docker-py
+#      command: pip install 'docker-py==1.7.0' --force-reinstall
       become: yes
       pip:
         name: docker-py
+        version: 1.7.0
+        state: forcereinstall
 
-    - name: Pull the docker container
+    - name: Pull the Apache Docker container
       become: yes
       docker_image:
-        name: moffzilla/httpd:v2.4
+        name: "moffzilla/httpd"
 
     - name: Create Apache container
       become: yes
       docker_container:
         name: my-apache-webserver
-        image: moffzilla/httpd:v2.4
+        image: "moffzilla/httpd"
         restart_policy: always
         volumes:
         - /mnt/html/www:/usr/local/apache2/htdocs/ 
         ports:
-          - "80:80"    
+          - "80:80"     
 
 
 #    - name: Transfer Apache Port Config  
