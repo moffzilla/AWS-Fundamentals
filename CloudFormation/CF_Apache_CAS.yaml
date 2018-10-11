@@ -38,7 +38,7 @@
 
     - name: Write Welcome Page
       shell: |
-        echo 'Hello AWS World' > /mnt/html/www/index.html
+        echo 'Hello CAS World' > /mnt/html/www/index.html
       register: WelcomeApache
 
     - git:
