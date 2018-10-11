@@ -92,5 +92,5 @@
       user: name=ubuntu groups=docker append=yes
         
     - name: Deploy WebServer 
-      command: docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:v2.4
+      command: sudo docker run -dit --restart always --name my-apache-webserver -p 80:80 -v /mnt/html/www:/usr/local/apache2/htdocs/ moffzilla/httpd:latest
 
